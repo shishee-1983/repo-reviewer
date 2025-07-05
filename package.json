@@ -1,0 +1,10 @@
+@@ .. @@
+   "scripts": {
+     "dev": "next dev",
+     "build": "next build",
++    "db:generate": "prisma generate",
++    "db:push": "prisma db push",
++    "db:migrate": "prisma migrate dev",
+     "start": "next start",
+     "lint": "next lint"
+   },
