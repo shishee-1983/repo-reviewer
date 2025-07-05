@@ -34,6 +34,7 @@ export async function POST(request: NextRequest) {
         name,
         email,
         hashedPassword,
+        emailVerified: new Date(), // Auto-verify for demo purposes
       }
     })
 
