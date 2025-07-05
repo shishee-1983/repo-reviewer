@@ -28,6 +28,7 @@ A Next.js 14 application that allows users to explore and document codebases wit
 
 - Node.js 18+ 
 - PostgreSQL database
+- Docker (optional, for containerized deployment)
 - Git
 
 ### Installation
@@ -52,6 +53,19 @@ Edit `.env` with your configuration:
 - `DATABASE_URL`: Your PostgreSQL connection string
 - `NEXTAUTH_URL`: Your application URL (http://localhost:3000 for development)
 - `NEXTAUTH_SECRET`: A random secret for JWT signing
+- `GOOGLE_CLIENT_ID`: Your Google OAuth client ID
+- `GOOGLE_CLIENT_SECRET`: Your Google OAuth client secret
+
+### Google OAuth Setup
+
+1. Go to the [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select an existing one
+3. Enable the Google+ API
+4. Go to "Credentials" and create an OAuth 2.0 Client ID
+5. Add authorized redirect URIs:
+   - `http://localhost:3000/api/auth/callback/google` (development)
+   - `https://yourdomain.com/api/auth/callback/google` (production)
+6. Copy the Client ID and Client Secret to your `.env` file
 
 4. Set up the database:
 ```bash
@@ -65,6 +79,46 @@ npm run dev
 ```
 
 Visit [http://localhost:3000](http://localhost:3000) to see the application.
+
+## Docker Deployment
+
+### Using Docker Compose (Recommended)
+
+1. Make sure you have Docker and Docker Compose installed
+2. Create a `.env` file with your environment variables
+3. Run the application:
+
+```bash
+docker-compose up -d
+```
+
+This will start both the PostgreSQL database and the Next.js application.
+
+### Using Docker Only
+
+1. Build the Docker image:
+```bash
+docker build -t codebase-explorer .
+```
+
+2. Run the container:
+```bash
+docker run -p 3000:3000 \
+  -e DATABASE_URL="your-database-url" \
+  -e NEXTAUTH_URL="http://localhost:3000" \
+  -e NEXTAUTH_SECRET="your-secret" \
+  -e GOOGLE_CLIENT_ID="your-google-client-id" \
+  -e GOOGLE_CLIENT_SECRET="your-google-client-secret" \
+  codebase-explorer
+```
+
+### Production Deployment
+
+For production deployment, make sure to:
+1. Use a secure `NEXTAUTH_SECRET`
+2. Set the correct `NEXTAUTH_URL` for your domain
+3. Use a production PostgreSQL database
+4. Configure your Google OAuth redirect URIs for your production domain
 
 ## Project Structure
 
@@ -166,6 +220,8 @@ Ensure these environment variables are set:
 - `DATABASE_URL`
 - `NEXTAUTH_URL` 
 - `NEXTAUTH_SECRET`
+- `GOOGLE_CLIENT_ID`
+- `GOOGLE_CLIENT_SECRET`
 - `OPENAI_API_KEY` (optional)
 - `GITHUB_TOKEN` (optional)
 
